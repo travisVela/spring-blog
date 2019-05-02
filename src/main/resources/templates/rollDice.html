@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8"/>
+    <title>Roll Dice</title>
+</head>
+<body>
+    <h1>Roll the Dice!</h1>
+    <br />
+    <p>Click a number below!</p>
+    <br />
+    <ul>
+        <li><a href="/rolldice/1" th:text="1"></a></li>
+        <li><a href="/rolldice/2" th:text="2"></a></li>
+        <li><a href="/rolldice/3" th:text="3"></a></li>
+        <li><a href="/rolldice/4" th:text="4"></a></li>
+        <li><a href="/rolldice/5" th:text="5"></a></li>
+        <li><a href="/rolldice/6" th:text="6"></a></li>
+    </ul>
+
+    <div style="margin-left: 20px" th:if="${getDiceRoll}">
+        <p th:text="${randomNumber}"></p>
+        <p th:text="${response}"></p>
+    </div>
+</body>
+</html>
