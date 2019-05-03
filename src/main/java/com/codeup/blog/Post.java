@@ -1,6 +1,13 @@
 package com.codeup.blog;
 
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+
 public class Post {
+
+
     private String title;
     private String body;
 
