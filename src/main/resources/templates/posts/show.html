@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:replace="fragments/head :: head('show')" />
+</head>
+<body>
+    <th:block th:replace="fragments/navbar :: navbar" />
+
+    <div class="container">
+        <div class="row my-5">
+            <div class="col d-flex flex-column justify-content-center">
+                <h1 th:text="${title}" class="display-4 my-4 mx-auto"></h1>
+                <p th:text="${body}"></p>
+            </div>
+        </div>
+    </div>
+
+    <th:block th:replace="fragments/footer :: footer" />
+</body>
+</html>
