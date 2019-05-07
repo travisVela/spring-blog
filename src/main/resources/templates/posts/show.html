@@ -9,8 +9,14 @@
     <div class="container">
         <div class="row my-5">
             <div class="col d-flex flex-column justify-content-center">
-                <h1 th:text="${title}" class="display-4 my-4 mx-auto"></h1>
-                <p th:text="${body}"></p>
+                <h1 th:text="${post.title}" class="display-4 my-4 mx-auto"></h1>
+                <p th:text="${post.body}"></p>
+                <a th:href="@{'mailto: ' + ${post.user.email}}"><p th:text="${post.user.email}"></p></a>
+                <div class="row my-2">
+                    <a th:href="@{'/posts/' + ${post.id} + '/edit'}" class="btn btn-warning m-2">Edit</a>
+                    <a th:href="@{'/posts/' + ${post.id} + '/delete'}" class="btn btn-danger m-2">Delete</a>
+
+                </div>
             </div>
         </div>
     </div>

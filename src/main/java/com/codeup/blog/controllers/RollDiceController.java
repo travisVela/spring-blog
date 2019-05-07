@@ -1,4 +1,4 @@
-package com.codeup.blog;
+package com.codeup.blog.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +23,7 @@ public class RollDiceController {
         int randomNumber = randomNumber();
         String notMatch = "Close, but no cigar";
         String match = "You guessed it!";
+        String randomString = "The roll was: " + randomNumber;
         String response = null;
 
 
@@ -33,7 +34,7 @@ public class RollDiceController {
         }
         model.addAttribute("getDiceRoll", true);
         model.addAttribute("response", response);
-        model.addAttribute("randomNumber", randomNumber);
+        model.addAttribute("randomNumber", randomString);
         return "rollDice";
     }
 

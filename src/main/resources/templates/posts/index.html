@@ -9,8 +9,9 @@
     <div class="container">
         <div class="row my-5">
             <div th:each="post : ${posts}" class="col">
-                <h1 th:text="${post.getTitle()}" class="display-4 my-4"></h1>
-                <p th:text="${post.getBody()}"></p>
+                <h1 th:text="${post.title}" class="display-4 my-4"></h1>
+                <p th:text="${post.body}"></p>
+                <a th:href="@{'show/' + ${post.id}}" class="btn btn-primary">Read more</a>
             </div>
         </div>
     </div>
