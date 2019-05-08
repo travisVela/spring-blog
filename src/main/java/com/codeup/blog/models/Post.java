@@ -24,7 +24,8 @@ public class Post {
 
     public Post(){}
 
-    public Post(String title, String body, User user) {
+    public Post(long id, String title, String body, User user) {
+        this.id = id;
         this.title = title;
         this.body = body;
         this.user = user;
@@ -32,6 +33,10 @@ public class Post {
 
     public long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -57,7 +62,4 @@ public class Post {
     public void setUser(User user) {
         this.user = user;
     }
-
-
-
 }
