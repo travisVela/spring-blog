@@ -26,7 +26,7 @@ public class PostController {
         this.emailService = emailService;
     }
 
-    @GetMapping("/index")
+    @GetMapping("/")
     public String index(Model model) {
         model.addAttribute("posts", postRepo.findAll());
         return "posts/index";
