@@ -84,6 +84,6 @@ public class PostController {
 
 
         postRepo.delete(post);
-        return "redirect:/index";
+        return "redirect:/";
     }
 }
