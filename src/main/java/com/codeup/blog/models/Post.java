@@ -17,7 +17,7 @@ public class Post {
     @Column(nullable = false)
     private String body;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn (name = "user_id")
     private User user;
 
