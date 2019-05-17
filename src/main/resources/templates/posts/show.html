@@ -6,10 +6,11 @@
 <body>
     <th:block th:replace="fragments/navbar :: navbar" />
 
-    <div class="container">
+    <div id="show" class="container">
         <div class="row my-5">
             <div class="col d-flex flex-column justify-content-center">
                 <h1 th:text="${post.title}" class="display-4 my-4 mx-auto"></h1>
+                <p th:text="${#dates.format(post.dateCreated, 'yyyy-MM-dd')}"></p>
                 <p th:text="${post.body}"></p>
                 <a th:href="@{'mailto: ' + ${post.user.email}}"><p th:text="${post.user.email}"></p></a>
                 <div class="row my-2" th:if="${post.getUser().getId()} == ${sessionUser.getId()}">

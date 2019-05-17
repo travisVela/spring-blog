@@ -1,17 +1,17 @@
 package com.codeup.blog.controllers;
 
-import com.codeup.blog.models.PostTransporter;
 import com.codeup.blog.models.User;
 import com.codeup.blog.repositories.PostRepository;
 import com.codeup.blog.models.Post;
 import com.codeup.blog.repositories.UserRepository;
 import com.codeup.blog.services.EmailService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import javax.persistence.OrderBy;
 
 @Controller
 public class PostController {
@@ -26,19 +26,36 @@ public class PostController {
         this.emailService = emailService;
     }
 
+//    @GetMapping("/")
+//    @Query("SELECT * FROM posts ORDER BY date_created DESC")
+//    public String index(Model model) {
+//        model.addAttribute("posts", postRepo.findAll());
+//        return "posts/index";
+//    }
+
     @GetMapping("/")
     public String index(Model model) {
-        model.addAttribute("posts", postRepo.findAll());
+        model.addAttribute("posts", postRepo.findByDateCreated());
         return "posts/index";
+    }
+
+    @GetMapping("/profile")
+    public String profile(Model model) {
+        User sessionUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User dbUser = userRepo.findOne(sessionUser.getId());
+        model.addAttribute("posts", postRepo.findByUserId(dbUser.getId()));
+
+        return "users/profile";
     }
 
 
     @GetMapping("/posts/{id}")
     public String singlePost(@PathVariable long id,  Model model) {
         User sessionUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
         model.addAttribute("post", postRepo.findOne(id));
+        System.out.println(postRepo.findOne(id).getDateCreated());
         model.addAttribute("sessionUser", userRepo.findOne(sessionUser.getId()));
+
         return "posts/show";
     }
 
@@ -47,6 +64,7 @@ public class PostController {
         model.addAttribute("post", new Post());
         return "posts/create";
     }
+
 
     @PostMapping("/posts/create")
     public String createPost(@ModelAttribute Post postToBeSaved) {

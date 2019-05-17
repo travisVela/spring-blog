@@ -19,3 +19,9 @@ body {
     color: #eee;
     text-decoration: none;
 }
+
+
+/*   show page   */
+#show {
+    max-width: 70%;
+}
