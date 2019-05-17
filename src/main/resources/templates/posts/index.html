@@ -9,8 +9,17 @@
     <div class="container">
         <div class="row my-5">
             <div th:each="post : ${posts}" class="col col-md-4">
-                <h1 th:text="${post.title}" class="display-4 my-4"></h1>
-                <p th:text="${#dates.format(post.dateCreated, 'yyyy-MM-dd')}"></p>
+                <div sec:authorize="isAuthenticated()">
+                    <a th:href="@{'posts/' + ${post.id}}">
+                        <h1 th:text="${post.title}" class="display-4 my-4"></h1>
+                    </a>
+                </div>
+                <div sec:authorize="isAnonymous()">
+                    <a href="/login">
+                        <h1 th:text="${post.title}" class="display-4 my-4"></h1>
+                    </a>
+                </div>
+                <p th:text="'posted on: ' + ${#dates.format(post.dateCreated, 'yyyy-MM-dd')}"></p>
                 <p th:text="${post.body}"></p>
                 <div sec:authorize="isAuthenticated()">
                     <a th:href="@{'posts/' + ${post.id}}" class="btn btn-primary">Read more</a>
