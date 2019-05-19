@@ -4,88 +4,104 @@ import com.codeup.blog.models.User;
 import com.codeup.blog.repositories.PostRepository;
 import com.codeup.blog.models.Post;
 import com.codeup.blog.repositories.UserRepository;
-import org.springframework.http.ResponseEntity;
+import com.codeup.blog.services.EmailService;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.OrderBy;
+
 @Controller
 public class PostController {
-//    private EmailService emailService;
-
 
     private final PostRepository postRepo;
     private final UserRepository userRepo;
+    private EmailService emailService;
 
-
-    public PostController(PostRepository postDao, UserRepository userRepo) {
+    public PostController(PostRepository postDao, UserRepository userRepo, EmailService emailService) {
         this.postRepo = postDao;
         this.userRepo = userRepo;
+        this.emailService = emailService;
     }
 
-
-//
-//    public PostController(EmailService emailService) {
-//        this.emailService = emailService;
+//    @GetMapping("/")
+//    @Query("SELECT * FROM posts ORDER BY date_created DESC")
+//    public String index(Model model) {
+//        model.addAttribute("posts", postRepo.findAll());
+//        return "posts/index";
 //    }
 
-    @GetMapping("/index")
+    @GetMapping("/")
     public String index(Model model) {
-        model.addAttribute("posts", postRepo.findAll());
+        model.addAttribute("posts", postRepo.findByDateCreated());
         return "posts/index";
     }
 
+    @GetMapping("/profile")
+    public String profile(Model model) {
+        User sessionUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User dbUser = userRepo.findOne(sessionUser.getId());
+        model.addAttribute("posts", postRepo.findByUserId(dbUser.getId()));
 
-    @GetMapping("/show/{id}")
+        return "users/profile";
+    }
+
+
+    @GetMapping("/posts/{id}")
     public String singlePost(@PathVariable long id,  Model model) {
-
+        User sessionUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         model.addAttribute("post", postRepo.findOne(id));
+        System.out.println(postRepo.findOne(id).getDateCreated());
+        model.addAttribute("sessionUser", userRepo.findOne(sessionUser.getId()));
 
         return "posts/show";
     }
 
     @GetMapping("/posts/create")
-    public String showCreateForm() {
+    public String showCreateForm(Model model) {
+        model.addAttribute("post", new Post());
         return "posts/create";
     }
 
-    @PostMapping("/posts/create")
-    @ResponseBody
-    public String createPost(@RequestParam String title, @RequestParam String body, User user) {
-        Post newPost = new Post();
-        newPost.setTitle(title);
-        newPost.setBody(body);
-        user = new User();
-        user.setId(1);
-        newPost.setUser(user);
-        postRepo.save(newPost);
 
-        return "new post created";
+    @PostMapping("/posts/create")
+    public String createPost(@ModelAttribute Post postToBeSaved) {
+        User sessionUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User userDB = userRepo.findOne(sessionUser.getId());
+        postToBeSaved.setUser(userDB);
+        Post savedPost = postRepo.save(postToBeSaved);
+        emailService.prepareAndSend(savedPost, "Post has been created", "The post has been created successfully and you can find it with the ID of: " + savedPost.getId());
+
+        return "redirect:/posts/" + savedPost.getId();
     }
 
-
     @GetMapping("/posts/{id}/edit")
-    public String editForm(@PathVariable long id, Model model) {
+    public String showEditForm(@PathVariable long id, Model model) {
         Post post = postRepo.findOne(id);
         model.addAttribute("post", post);
         return "posts/edit";
     }
 
     @PostMapping("/posts/{id}/edit")
-    @ResponseBody
-    public String editPost(@RequestParam String title, @RequestParam String body, @PathVariable long id) {
-        Post post = postRepo.findOne(id);
-        post.setTitle(title);
-        post.setBody(body);
-        postRepo.save(post);
-        return "Successfully edited post";
+    public String editPost(@ModelAttribute Post postToBeEdited) {
+//        postToBeEdited.setUser(userRepo.findOne(1L));
+        User sessionUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User userDB = userRepo.findOne(sessionUser.getId());
+        postToBeEdited.setUser(userDB);
+        postRepo.save(postToBeEdited);
+        return "redirect:/posts/" + postToBeEdited.getId();
     }
 
     @GetMapping("/posts/{id}/delete")
     public String deletePost(@PathVariable long id) {
         Post post = postRepo.findOne(id);
+        User sessionUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User userDB = userRepo.findOne(sessionUser.getId());
+
 
         postRepo.delete(post);
-        return "posts/index";
+        return "redirect:/";
     }
 }

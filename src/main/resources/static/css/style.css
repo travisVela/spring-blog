@@ -6,3 +6,22 @@ body {
     height: 100px;
     color: #fff;
 }
+
+.container {
+    height: 90vh;
+}
+
+.btn-link {
+    color: #ffffff80;
+    text-decoration: none;
+}
+.btn-link:hover {
+    color: #eee;
+    text-decoration: none;
+}
+
+
+/*   show page   */
+#show {
+    max-width: 70%;
+}
