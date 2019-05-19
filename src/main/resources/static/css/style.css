@@ -2,14 +2,18 @@ body {
     background: #ddd;
 }
 
+a:hover {
+    text-decoration: none;
+}
+
 #footer {
     height: 100px;
     color: #fff;
 }
 
-.container {
-    height: 90vh;
-}
+/*.container {*/
+    /*height: 90vh;*/
+/*}*/
 
 .btn-link {
     color: #ffffff80;
