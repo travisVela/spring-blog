@@ -13,23 +13,35 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/">Home</a>
                 </li>
-                <li sec:authorize="isAuthenticated()" class="nav-item">
-                    <a class="nav-link" href="/profile">Profile</a>
-                </li>
+                <!--<li sec:authorize="isAuthenticated()" class="nav-item">-->
+                    <!--<a class="nav-link" href="/profile">Profile</a>-->
+                <!--</li>-->
                 <li sec:authorize="!isAuthenticated()" class="nav-item">
                     <a class="nav-link" href="/register">Register</a>
                 </li>
                 <li sec:authorize="!isAuthenticated()" class="nav-item">
                     <a class="nav-link" href="/login">Login</a>
                 </li>
-                <li sec:authorize="isAuthenticated()" class="nav-item">
-                    <a class="nav-link" href="/posts/create">Create</a>
+                <!--<li sec:authorize="isAuthenticated()" class="nav-item">-->
+                    <!--<a class="nav-link" href="/posts/create">Create</a>-->
 
-                </li>
-                <li sec:authorize="isAuthenticated()" class="nav-item">
-                    <form th:action="@{/logout}" th:method="post">
-                        <button class="btn-link btn">Logout</button>
-                    </form>
+                <!--</li>-->
+                <!--<li sec:authorize="isAuthenticated()" class="nav-item">-->
+                    <!--<form th:action="@{/logout}" th:method="post">-->
+                        <!--<button class="btn-link btn">Logout</button>-->
+                    <!--</form>-->
+                <!--</li>-->
+                <li sec:authorize="isAuthenticated()" class="dropdown">
+                    <a class="btn-link btn dropdown-toggle" href="#" role="button" id="dropdownMenu" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">Profile</a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenu">
+                        <a class="dropdown-item" href="/profile">Profile</a>
+                        <a class="dropdown-item" href="/posts/create">Create Post</a>
+                        <a class="dropdown-item" th:href="@{'/users/' + ${#authentication.principal.id} + '/edit'}">Edit Profile</a>
+                        <form th:action="@{/logout}" th:method="post" class="dropdown-item">
+                            <button class="btn-link btn btn-primary">Logout</button>
+                        </form>
+                    </div>
                 </li>
             </ul>
             <form class="form-inline my-2 my-lg-0">

@@ -99,7 +99,7 @@ public class PostController {
         Post post = postRepo.findOne(id);
         User sessionUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User userDB = userRepo.findOne(sessionUser.getId());
-
+        
 
         postRepo.delete(post);
         return "redirect:/";
